@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{login-layout :: head}"></head>
+<body class="authentication-body">
+<div class="authentication-wrapper">
+    <header th:replace="~{login-layout :: header}"></header>
+    <main>
+        <h1>Sign In</h1>
+        <form method="post" th:attr="action=@{/authenticateUser}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <input type="text" name="username" placeholder="username" autocomplete="off"/>
+            <input type="password" name="password" placeholder="password"/>
+            <select th:field="*{role}">
+                <option th:each="option : ${role}" th:value="${option.stringValue}"
+                        th:text="${option.text}" th:selected="${option.stringValue == role}"/>
+            </select>
+            <button type="submit">sign in</button>
+        </form>
+        <div th:if="${param.error}" class="fail-container">
+            Invalid username or password
+        </div>
+        <div th:if="${param.logout}" class="success-container">
+            You have been logged out
+        </div>
+        <div class="link-container">
+            <a th:href="@{/account/registerForm}">Click here to register as a customer</a>
+        </div>
+    </main>
+</div>
+</body>
+</html>

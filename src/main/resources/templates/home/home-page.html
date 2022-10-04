@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="en">
+<head th:replace="~{layout :: head}"></head>
+<style>
+    h1, h2 {text-align: center;}
+</style>
+<body class="main-body" th:data-role="${#authentication.getAuthorities()}" >
+<nav sec:authorize="hasAuthority('SuperAdmin')" th:replace="~{layout :: navigationSuperAdmin}"></nav>
+<nav sec:authorize="hasAuthority('Admin')" th:replace="~{layout :: navigationAdmin}"></nav>
+<nav sec:authorize="hasAuthority('Customer')" th:replace="~{layout :: navigationCustomer}"></nav>
+<header th:replace="~{layout :: header (${breadCrumbs})}"></header>
+<main>
+
+    <div sec:authorize="hasAnyAuthority('SuperAdmin', 'Admin')">
+        <h1>Admin Landing Page</h1>
+        <h2>Don't forget, you're here forever</h2>
+    </div>
+
+    <div sec:authorize="hasAuthority('Customer')">
+        <h1>Seaside Hotel</h1>
+        <h2>Welcome to Seaside Hotel application</h2>
+        <h2>You can check your transaction and book a room here.</h2>
+
+        <h2>Book your stay with us, and you’ll be happy to come back</h2>
+    </div>
+
+</main>
+<footer th:replace="~{layout :: footer}"></footer>
+<th:block th:replace="~{layout :: javascript}"></th:block>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="en">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body" th:data-role="${#authentication.getAuthorities()}" >
+<nav sec:authorize="hasAuthority('SuperAdmin')" th:replace="~{layout :: navigationSuperAdmin}"></nav>
+<nav sec:authorize="hasAuthority('Admin')" th:replace="~{layout :: navigationAdmin}"></nav>
+<header th:replace="~{layout :: header (${breadCrumbs})}"></header>
+<main>
+    <div class="grid-container customer-index">
+        <form method="get" class="filter" th:attr="action=@{/transaction/index}">
+            <input type="text" name="customerName" placeholder="Customer Name..." th:attr="value=${customerName}" />
+            <input type="text" name="roomNumber" placeholder="Room Number..." th:attr="value=${roomNumber}" />
+            <button class="blue-button" type="submit">Search</button>
+        </form>
+        <table>
+            <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Room</th>
+                <th>Check In</th>
+                <th>Total Days</th>
+                <th>Bill</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="tr : ${grid}">
+                <td th:text="*{tr.customerName}"></td>
+                <td th:text="*{tr.roomNumber}"></td>
+                <td th:text="*{tr.checkIn}"></td>
+                <td th:text="*{tr.getTotalDays}"></td>
+                <td th:text="*{tr.getBillFormatRupiah}"></td>
+                <td th:text="*{tr.getStatus}"></td>
+                <td th:if="${tr.getStatus == 'Pending' || tr.getStatus == 'Expired'}">
+                    <a th:href="@{/transaction/delete(id=*{tr.id})}" class="blue-button delete-button">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">
+                    <div class="pagination">
+                        <div th:text="|page ${currentPage} of ${totalPages}|"></div>
+                        <div>
+                            <a th:each="loop:${#numbers.sequence(1,totalPages)}"
+                               th:href="@{/transaction/index(page=${loop},customerName=${customerName},roomNumber=${roomNumber})}"
+                               th:text="${loop}"></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{layout :: footer}"></footer>
+<th:block th:replace="~{layout :: javascript}"></th:block>
+</body>
+</html>

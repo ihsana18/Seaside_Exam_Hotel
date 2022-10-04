@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seaside</title>
+    <link rel="icon" type="image/ico" th:href="@{/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/resources/css/normalize.css}" />
+    <link rel="stylesheet" th:href="@{/resources/css/font-awesome.css}" />
+    <link rel="stylesheet" th:href="@{/resources/css/site.css}" />
+    <script th:src="@{/resources/js/jquery-3.6.0.js}"></script>
+</head>
+<body class="authentication-body">
+<div class="authentication-wrapper">
+    <header th:fragment="header" class="company-logo">
+        <img th:src="@{/resources/image/logo.png}" alt="Basilisk" />
+        <h1>
+            <span class="bold">Seaside</span> Hotel
+        </h1>
+    </header>
+    <main></main>
+</div>
+</body>
+</html>

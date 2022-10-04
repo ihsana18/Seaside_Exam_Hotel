@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="en">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body" th:data-role="${#authentication.getAuthorities()}" >
+<nav sec:authorize="hasAuthority('SuperAdmin')" th:replace="~{layout :: navigationSuperAdmin}"></nav>
+<nav sec:authorize="hasAuthority('Admin')" th:replace="~{layout :: navigationAdmin}"></nav>
+<nav sec:authorize="hasAuthority('Customer')" th:replace="~{layout :: navigationCustomer}"></nav>
+<header th:replace="~{layout :: header (${breadCrumbs})}"></header>
+<main>
+    <div class="fail-container">
+        <p>You are not authorized to access this page</p>
+    </div>
+    <a class="blue-button" th:href="@{/home/}">Back to Landing Page</a>
+</main>
+<footer th:replace="~{layout :: footer}"></footer>
+<th:block th:replace="~{layout :: javascript}"></th:block>
+</body>
+</html>

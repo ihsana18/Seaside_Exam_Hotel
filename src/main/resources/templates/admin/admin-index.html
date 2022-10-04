@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body" th:data-role="${#authentication.getAuthorities()}" th:id="${#authentication.getAuthorities()}">
+<nav th:replace="~{layout :: navigationSuperAdmin}"></nav>
+<header th:replace="~{layout :: header (${breadCrumbs})}"></header>
+<main>
+    <div class="grid-container admin-index">
+        <a class="blue-button create-button" th:href="@{/admin/insertAdmin}">Insert New Admin</a>
+        <table>
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Job Title</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="admin : ${grid}">
+                <td th:text="*{admin.username}"></td>
+                <td th:text="*{admin.jobTitle}"></td>
+                <td>
+                    <a th:href="@{/admin/delete(username=*{username})}" class="blue-button delete-button">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">
+                    <div class="pagination">
+                        <div th:text="|page ${currentPage} of ${totalPages}|"></div>
+                        <div>
+                            <a th:each="loop:${#numbers.sequence(1,totalPages)}"
+                               th:href="@{/admin/index(page=${loop})}"
+                               th:text="${loop}"></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{layout :: footer}"></footer>
+<th:block th:replace="~{layout :: javascript}"></th:block>
+</body>
+</html>

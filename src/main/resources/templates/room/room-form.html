@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="en">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body" th:data-role="${#authentication.getAuthorities()}" >
+<nav sec:authorize="hasAuthority('SuperAdmin')" th:replace="~{layout :: navigationSuperAdmin}"></nav>
+<nav sec:authorize="hasAuthority('Admin')" th:replace="~{layout :: navigationAdmin}"></nav>
+<header th:replace="~{layout :: header (${breadCrumbs})}"></header>
+<main>
+    <form method="post" class="upsert-form alternate-action" th:object="${room}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <table th:attr="data-action=${type}">
+            <tbody>
+            <tr>
+                <td><label>Room Number*</label></td>
+                <td>
+                    <input type="text" th:field="*{roomNumber}" class="readonly-id">
+                    <div class="field-validation-error" th:errors="*{roomNumber}"></div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Type*</label></td>
+                <td>
+                    <select th:field="*{type}">
+                        <option th:each="option : ${typeDropdown}" th:value="${option.stringValue}"
+                                th:text="${option.text}" th:selected="${option.stringValue == type}"/>
+                    </select>
+                    <div class="field-validation-error" th:errors="*{type}"></div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Price</label></td>
+                <td>
+                    <input type="text" th:field="*{price}">
+                    <div class="field-validation-error" th:errors="*{price}"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="blue-button" type="submit" th:text="${type} + ' Room'"></button>
+    </form>
+</main>
+<footer th:replace="~{layout :: footer}"></footer>
+<th:block th:replace="~{layout :: javascript}"></th:block>
+</body>
+</html>

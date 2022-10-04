@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="en">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body" th:data-role="${#authentication.getAuthorities()}" >
+<nav sec:authorize="hasAuthority('SuperAdmin')" th:replace="~{layout :: navigationSuperAdmin}"></nav>
+<nav sec:authorize="hasAuthority('Admin')" th:replace="~{layout :: navigationAdmin}"></nav>
+<header th:replace="~{layout :: header (${breadCrumbs})}"></header>
+<main>
+    <div class="grid-container room-index">
+        <form method="get" class="filter" th:attr="action=@{/room/index}">
+            <input type="text" name="roomNumber" placeholder="Room Number..." th:attr="value=${roomNumber}" />
+            <button class="blue-button" type="submit">Search</button>
+        </form>
+
+        <a class="blue-button create-button" th:href="@{/room/upsertForm}">Insert New Room</a>
+        <table>
+            <thead>
+            <tr>
+                <th>Number</th>
+                <th>Type</th>
+                <th>Price Per Day</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="room : ${grid}">
+                <td th:text="*{room.roomNumber}"></td>
+                <td th:text="*{room.type}"></td>
+                <td th:text="*{room.getPriceFormatRupiah}"></td>
+                <td th:text="*{room.getStatus}"></td>
+                <td th:if="${room.getStatus == 'Vacant'}">
+                    <a th:href="@{/room/upsertForm(roomNumber=*{room.roomNumber})}" class="blue-button delete-button">Edit</a>
+                    <a th:href="@{/room/delete(roomNumber=*{room.roomNumber})}" class="blue-button delete-button">Delete</a>
+                </td>
+                <td th:if="${room.getStatus == 'Occupied'}">
+                    <a th:href="@{/transaction/detail(roomNumber=*{room.roomNumber})}" class="blue-button delete-button">See Reservation</a>
+                </td>
+                <td th:if="${room.getStatus == 'Reserved'}">
+                    <a th:href="@{/transaction/detail(roomNumber=*{room.roomNumber})}" class="blue-button delete-button">See Reservation</a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">
+                    <div class="pagination">
+                        <div th:text="|page ${currentPage} of ${totalPages}|"></div>
+                        <div>
+                            <a th:each="loop:${#numbers.sequence(1,totalPages)}"
+                               th:href="@{/room/index(page=${loop},roomNumber=${roomNumber})}"
+                               th:text="${loop}"></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{layout :: footer}"></footer>
+<th:block th:replace="~{layout :: javascript}"></th:block>
+</body>
+</html>

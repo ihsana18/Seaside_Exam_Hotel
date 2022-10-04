@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body" th:data-role="${#authentication.getAuthorities()}">
+<nav th:replace="~{layout :: navigationCustomer}"  ></nav>
+<header th:replace="~{layout :: header (${breadCrumbs})}"></header>
+<main>
+    <form method="post" class="upsert-form" th:attr="action=@{/transaction/reserve}" th:object="${transaction}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{customerId}">
+        <table>
+            <tbody>
+            <tr>
+                <td><label>Room Number</label></td>
+                <td>
+                    <input type="text" th:field="*{roomNumber}" readonly="true">
+                    <div class="field-validation-error" th:errors="*{roomNumber}"></div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Room Type</label></td>
+                <td>
+                    <input type="text" th:field="*{type}" readonly="true">
+                    <div class="field-validation-error" th:errors="*{type}" ></div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Check In Date*</label></td>
+                <td>
+                    <input type="date" th:field="*{checkIn}" onchange="DateIni1(this)">
+                    <div class="field-validation-error" th:errors="*{checkIn}"></div>
+                    <div class="field-validation-error" th:errors="${transaction}"></div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Check Out Date*</label></td>
+                <td>
+                    <input type="date" th:field="*{checkOut}" onchange="DateIni2(this)">
+                    <div class="field-validation-error" th:errors="*{checkOut}"></div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Price per Day</label></td>
+                <td>
+                    <input type="text" th:field="*{price}" readonly="true">
+                </td>
+            </tr>
+            <tr>
+                <td><label>Bill</label></td>
+                <td>
+                    <input type="text" th:field="*{bill}" readonly="true">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="blue-button" type="submit" >Reserve Room</button>
+    </form>
+</main>
+<footer th:replace="~{layout :: footer}"></footer>
+<th:block th:replace="~{layout :: javascript}"></th:block>
+</body>
+</html>

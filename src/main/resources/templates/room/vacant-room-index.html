@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="en">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body" th:data-role="${#authentication.getAuthorities()}" >
+<nav sec:authorize="hasAuthority('Customer')" th:replace="~{layout :: navigationCustomer}"></nav>
+<header th:replace="~{layout :: header (${breadCrumbs})}"></header>
+<main>
+    <div class="grid-container room-index">
+        <form method="get" class="filter" th:attr="action=@{/room/vacantRoom}">
+            <select name="roomType">
+                <option th:value=null>No Specific Type</option>
+                <option th:each="option : ${typeDropdown}" th:attr="value=${option.stringValue}"
+                        th:text="${option.text}" th:selected="${option.stringValue == typeDropdown}"></option>
+            </select>
+            <button class="blue-button" type="submit">Search</button>
+        </form>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Number</th>
+                <th>Type</th>
+                <th>Price Per Day</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="room : ${grid}">
+                <td th:text="*{room.roomNumber}"></td>
+                <td th:text="*{room.type}"></td>
+                <td th:text="*{room.getPriceFormatRupiah}"></td>
+                <td>
+                    <a th:href="@{/room/reserveForm(roomNumber=${room.roomNumber},username=${#authentication.getPrincipal().getUsername()})}" class="blue-button delete-button">Reserve</a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">
+                    <div class="pagination">
+                        <div th:text="|page ${currentPage} of ${totalPages}|"></div>
+                        <div>
+                            <a th:each="loop:${#numbers.sequence(1,totalPages)}"
+                               th:href="@{/room/index(page=${loop},roomType=${roomType})}"
+                               th:text="${loop}"></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{layout :: footer}"></footer>
+<th:block th:replace="~{layout :: javascript}"></th:block>
+</body>
+</html>

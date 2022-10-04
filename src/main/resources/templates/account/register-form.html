@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{login-layout :: head}"></head>
+<body class="authentication-body">
+<div class="authentication-wrapper">
+    <header th:replace="~{login-layout :: header}"></header>
+    <main>
+        <h1>Sign Up</h1>
+        <form method="post" th:attr="action=@{/account/register}" th:object="${customer}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <input type="hidden" th:field="*{id}">
+
+            <div class="field-validation-error" th:errors="${customer}"></div>
+            <input type="text" th:field="*{username}" placeholder="Username">
+            <div class="field-validation-error" th:errors="*{username}"></div>
+
+            <input type="text" th:field="*{name}" placeholder="Name">
+            <div class="field-validation-error" th:errors="*{name}"></div>
+
+            <input type="text" th:field="*{email}" placeholder="Email">
+            <div class="field-validation-error" th:errors="*{email}"></div>
+
+            <input type="text" th:field="*{address}" placeholder="Address">
+            <div class="field-validation-error" th:errors="*{address}"></div>
+
+            <input type="password" th:field="*{password}" placeholder="Password">
+            <div class="field-validation-error" th:errors="*{password}"></div>
+
+            <input type="password" th:field="*{passwordConfirmation}" placeholder="Confirm Password">
+            <div class="field-validation-error" th:errors="*{passwordConfirmation}"></div>
+
+            <button type="submit">sign up</button>
+        </form>
+        <div class="link-container">
+            <a th:href="@{/account/loginForm}">Click here to login</a>
+        </div>
+    </main>
+</div>
+</body>
+</html>

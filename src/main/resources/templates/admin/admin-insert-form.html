@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body" th:data-role="${#authentication.getAuthorities()}">
+<nav th:replace="~{layout :: navigationSuperAdmin}"></nav>
+<header th:replace="~{layout :: header (${breadCrumbs})}"></header>
+<main>
+    <form method="post" class="upsert-form" th:attr="action=@{/admin/insert}" th:object="${admin}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" th:field="*{id}"/>
+        <table>
+            <tbody>
+            <tr>
+                <td><label>Username*</label></td>
+                <td>
+                    <input type="text" th:field="*{username}">
+                    <div class="field-validation-error" th:errors="*{username}"></div>
+                    <div class="field-validation-error" th:errors="${admin}"></div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Job Title*</label></td>
+                <td>
+                    <input type="text" th:field="*{jobTitle}">
+                    <div class="field-validation-error" th:errors="*{jobTitle}"></div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Password*</label></td>
+                <td>
+                    <input type="password" th:field="*{password}">
+                    <div class="field-validation-error" th:errors="*{password}"></div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Password Confirmation*</label></td>
+                <td>
+                    <input type="password" th:field="*{passwordConfirmation}">
+                    <div class="field-validation-error" th:errors="*{passwordConfirmation}"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="blue-button" type="submit">Insert Admin</button>
+    </form>
+</main>
+<footer th:replace="~{layout :: footer}"></footer>
+<th:block th:replace="~{layout :: javascript}"></th:block>
+</body>
+</html>
